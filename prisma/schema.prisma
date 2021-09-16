@@ -48,7 +48,7 @@ model Transaction {
   orderTime DateTime @default(now())
   agenda    Agenda   @relation(fields: [agendaId], references: [id])
   quantity  Int
-  total     Int
+  total     Float
   agendaId  Int
   cinema    Cinema   @relation(fields: [cinemaId], references: [id])
   cinemaId  Int
