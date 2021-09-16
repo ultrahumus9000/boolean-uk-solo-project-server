@@ -35,42 +35,28 @@ model Cinema {
   staff        User[]
   location     String
   capacity     Int           @default(60)
-  showRoom     Int           @default(5)
+  screening    Int           @default(5)
   revenue      Int           @default(0)
-  event        Event?
+  events       Event[]
   transactions Transaction[]
 }
 
 model Transaction {
-  id       Int      @id @default(autoincrement())
-  cinema   Cinema   @relation(fields: [cinemaId], references: [id], onDelete: Cascade)
-  cinemaId Int
-  guest    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   Int
-  date     DateTime @default(now())
-  total    Int
-  orders   Order[]
-}
-
-model Order {
-  id            Int         @id @default(autoincrement())
-  transaction   Transaction @relation(fields: [transactionId], references: [id])
-  transactionId Int
-  movie         Movie       @relation(fields: [movieId], references: [id])
-  movieId       Int
-  quantity      Int
-  type          Type
-}
-
-enum Type {
-  D2
-  D3
-  IMAX
+  id        Int      @id @default(autoincrement())
+  guest     User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  guestId   Int
+  orderTime DateTime @default(now())
+  agenda    Agenda   @relation(fields: [agendaId], references: [id])
+  quantity  Int
+  total     Int
+  agendaId  Int
+  cinema    Cinema   @relation(fields: [cinemaId], references: [id])
+  cinemaId  Int
 }
 
 model Event {
   id        Int      @id @default(autoincrement())
-  movies    Movie[]
+  date      DateTime @db.Date
   agendas   Agenda[]
   price2D   Int      @default(7)
   price3D   Int      @default(9)
@@ -87,20 +73,25 @@ model Movie {
   genre       String
   title       String
   overview    String
-  event       Event    @relation(fields: [eventId], references: [id])
   poster      String
   duration    String   @default("100 mins")
   agendas     Agenda[]
-  orders      Order[]
-  eventId     Int
 }
 
 model Agenda {
-  id        Int      @id @default(autoincrement())
-  movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
-  movieId   Int
-  screening Int
-  showTime  DateTime @db.Time
-  event     Event    @relation(fields: [eventId], references: [id])
-  eventId   Int
+  id           Int           @id @default(autoincrement())
+  movie        Movie         @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId      Int
+  screening    Int
+  showTime     DateTime      @db.Time
+  event        Event         @relation(fields: [eventId], references: [id])
+  eventId      Int
+  transactions Transaction[]
+  type         Type          @default(D2)
+}
+
+enum Type {
+  D2
+  D3
+  IMAX
 }
