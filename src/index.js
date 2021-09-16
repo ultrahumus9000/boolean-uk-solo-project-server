@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const middleware = require("./utils/middleware");
 const cookieParser = require("cookie-parser");
+const { stripSecretKey, stripePublicKey } = require("./utils/authgenerator");
 const app = express();
 
 /* SETUP MIDDLEWARE */
@@ -28,6 +29,7 @@ app.get("*", (req, res) => {
 
 /* START SERVER */
 
+console.log(stripSecretKey, stripePublicKey);
 const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
