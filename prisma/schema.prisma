@@ -52,17 +52,16 @@ model Transaction {
   agendaId  Int
   cinema    Cinema   @relation(fields: [cinemaId], references: [id])
   cinemaId  Int
+  policy    Policy   @relation(fields: [policyId], references: [id])
+  policyId  Int
 }
 
 model Event {
-  id        Int      @id @default(autoincrement())
-  date      DateTime @db.Date
-  agendas   Agenda[]
-  price     Int      @default(10)
-  discount  Int      @default(10)
-  condition Int      @default(4)
-  cinema    Cinema   @relation(fields: [cinemaId], references: [id])
-  cinemaId  Int
+  id       Int      @id @default(autoincrement())
+  date     DateTime @db.Date
+  agendas  Agenda[]
+  cinema   Cinema   @relation(fields: [cinemaId], references: [id])
+  cinemaId Int
 }
 
 model Movie {
@@ -86,4 +85,12 @@ model Agenda {
   eventId      Int
   transactions Transaction[]
   quantity     Int           @default(60)
+}
+
+model Policy {
+  id           Int           @id @default(autoincrement())
+  price        Int           @default(10)
+  discount     Int           @default(10)
+  condition    Int           @default(4)
+  transactions Transaction[]
 }
