@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "@prisma/client": "^3.0.2",
     "bcrypt": "^5.0.1",
@@ -16,8 +19,10 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "faker": "^5.5.3",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "node-fetch": "^3.0.0",
     "stripe": "^8.174.0"
   },
   "devDependencies": {
