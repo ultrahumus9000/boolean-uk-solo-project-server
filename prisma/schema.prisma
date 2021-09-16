@@ -58,9 +58,7 @@ model Event {
   id        Int      @id @default(autoincrement())
   date      DateTime @db.Date
   agendas   Agenda[]
-  price2D   Int      @default(7)
-  price3D   Int      @default(9)
-  imaxPrice Int      @default(13)
+  price     Int      @default(10)
   discount  Int      @default(10)
   condition Int      @default(4)
   cinema    Cinema   @relation(fields: [cinemaId], references: [id])
@@ -87,11 +85,4 @@ model Agenda {
   event        Event         @relation(fields: [eventId], references: [id])
   eventId      Int
   transactions Transaction[]
-  type         Type          @default(D2)
-}
-
-enum Type {
-  D2
-  D3
-  IMAX
 }
