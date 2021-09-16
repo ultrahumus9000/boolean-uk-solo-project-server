@@ -8,8 +8,7 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"]
+  provider = "prisma-client-js"
 }
 
 model User {
@@ -60,6 +59,13 @@ model Order {
   movie         Movie       @relation(fields: [movieId], references: [id])
   movieId       Int
   quantity      Int
+  type          Type
+}
+
+enum Type {
+  D2
+  D3
+  IMAX
 }
 
 model Event {
@@ -83,7 +89,7 @@ model Movie {
   overview    String
   event       Event    @relation(fields: [eventId], references: [id])
   poster      String
-  duration    String   @default("2 hours")
+  duration    String   @default("100 mins")
   agendas     Agenda[]
   orders      Order[]
   eventId     Int
