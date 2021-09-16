@@ -89,7 +89,8 @@ model Agenda {
 
 model Policy {
   id           Int           @id @default(autoincrement())
-  price        Int           @default(10)
+  adultPrice   Float         @default(10.00)
+  childPrice   Float         @default(6.00)
   discount     Int           @default(10)
   condition    Int           @default(4)
   transactions Transaction[]
