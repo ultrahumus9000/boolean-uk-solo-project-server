@@ -36,7 +36,6 @@ model Cinema {
   location     String
   capacity     Int           @default(60)
   screening    Int           @default(5)
-  revenue      Int           @default(0)
   events       Event[]
   transactions Transaction[]
 }
