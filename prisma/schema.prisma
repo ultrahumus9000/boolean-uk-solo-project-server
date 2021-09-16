@@ -85,4 +85,5 @@ model Agenda {
   event        Event         @relation(fields: [eventId], references: [id])
   eventId      Int
   transactions Transaction[]
+  quantity     Int           @default(60)
 }

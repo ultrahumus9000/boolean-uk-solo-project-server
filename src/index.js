@@ -29,7 +29,7 @@ app.get("*", (req, res) => {
 
 /* START SERVER */
 
-console.log(stripSecretKey, stripePublicKey);
+// console.log(stripSecretKey, stripePublicKey);
 const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
