@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const router_1 = __importDefault(require("./auth/router"));
 const router_2 = __importDefault(require("./movie/router"));
+// import fetch from "node-fetch";
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -22,17 +23,6 @@ const cors = require("cors");
 const app = express();
 app.enable("trust proxy");
 //node-fetch not work due to package.json
-// app.get("*", (req, res) => {
-//   // res.status(404).json({ msg: "No route is matching your request.." });
-//   fetch(
-//     "https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1"
-//   )
-//     .then((resp) => resp.json())
-//     .then((movies) => {
-//       console.log(movies);
-//       res.json(movies);
-//     });
-// });
 //middlewares
 app.use(logger("dev"));
 app.use(express.json());
@@ -54,8 +44,17 @@ app.post("/temp", (req, res) => {
         return __awaiter(this, void 0, void 0, function* () { });
     });
 });
+// app.get("*", (req: Request, res: Response) => {
+//   res.json("i am here");
+// });
 app.get("*", (req, res) => {
-    res.json("i am here");
+    // res.status(404).json({ msg: "No route is matching your request.." });
+    fetch("https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1")
+        .then((resp) => resp.json())
+        .then((movies) => {
+        console.log(movies);
+        res.json(movies);
+    });
 });
 /* START SERVER */
 // console.log(stripSecretKey, stripePublicKey);
