@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "compile": "tsc && node ./dist/ || exit 1",
+    "start": "nodemon ./src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^3.0.2",

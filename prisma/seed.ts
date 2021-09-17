@@ -9,20 +9,7 @@ const { movie, cinema, user, policy } = db;
 
 const renderArray = Array(6).fill("");
 
-const rawMoviesData = [];
-
-// const defaultPassword = "test";
-
-async function fetchMovies() {
-  await fetch(
-    "https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1"
-  )
-    .then((resp) => resp.json)
-    .then((movies) => {
-      rawMoviesData = movies;
-      console.log("rawMoviesData", rawMoviesData);
-    });
-}
+const defaultPassword = "test";
 
 // id           Int           @id @default(autoincrement())
 // staff        User[]
@@ -54,40 +41,37 @@ async function fetchMovies() {
 // https://image.tmdb.org/t/p/w300/gzppdxEJ6fofhtLzSVSUJZEVxvq.jpg
 
 async function seed() {
-  await fetchMovies();
-  console.log("rawMoviesData", rawMoviesData);
-
+  // await fetchMovies();
+  // console.log("rawMoviesData", rawMoviesData);
   const cinemaResult = await cinema.create({
     data: {
       location: "Sheffield",
     },
   });
-
   const policyResult = await policy.create({
     data: {},
   });
 
-  let data = [];
   for (const ele of renderArray) {
-    const newUser = {
-      username: faker.internet.userName(),
-      password: defaultPassword,
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      role: "Admin",
-      avatar: faker.internet.avatar(),
-      cinemaId: cinemaResult.id,
-    };
-    data.push(newUser);
+    const hashedPasseword = await hash(defaultPassword, 10);
+
+    const userResult = await user.create({
+      data: {
+        username: faker.internet.userName(),
+        password: hashedPasseword,
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
+        email: faker.internet.email(),
+        role: "Admin",
+        avatar: faker.internet.avatar(),
+        cinemaId: cinemaResult.id,
+      },
+    });
+
+    console.log(userResult);
   }
 
-  const userResult = await user.createMany({
-    data,
-    skipDuplicates: true,
-  });
-
-  console.log(cinemaResult, policyResult, data);
+  console.log(cinemaResult, policyResult);
 }
 
 seed()

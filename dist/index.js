@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const node_fetch_1 = __importDefault(require("node-fetch"));
 const app = (0, express_1.default)();
 /* SETUP MIDDLEWARE */
 app.disable("x-powered-by");
@@ -20,20 +21,15 @@ app.use((0, morgan_1.default)("dev"));
 /* SETUP ROUTES */
 // app.use(middleware);
 // const fetch = require("node-fetch");
-// const rawMoviesData = [];
-// async function fetchMovies() {
-//   await fetch(
-//     "https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1"
-//   )
-//     .then((resp) => resp.json)
-//     .then((movies) => {
-//       rawMoviesData = movies;
-//       console.log("rawMoviesData", rawMoviesData);
-//     });
-// }
-// fetchMovies();
+let rawMoviesData = [];
 app.get("*", (req, res) => {
-    res.json({ ok: true });
+    (0, node_fetch_1.default)("https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1")
+        .then((resp) => resp.json())
+        .then((movies) => {
+        // rawMoviesData = movies;
+        console.log("rawMoviesData", movies);
+        res.json({ ok: true });
+    });
 });
 /* START SERVER */
 // console.log(stripSecretKey, stripePublicKey);
