@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc && node ./dist/ || exit 1",
-    "start": "nodemon ./src/index.ts"
+    "start": "nodemon -e ts -x \"npm run compile\""
   },
   "keywords": [],
   "author": "",
@@ -22,7 +22,6 @@
     "@types/express": "^4.17.13",
     "@types/faker": "^5.5.8",
     "@types/jsonwebtoken": "^8.5.5",
-    "@types/node-fetch": "^3.0.3",
     "@types/stripe": "^8.0.417",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",

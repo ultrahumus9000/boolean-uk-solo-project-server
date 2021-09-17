@@ -1,35 +1,61 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const morgan_1 = __importDefault(require("morgan"));
-const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const node_fetch_1 = __importDefault(require("node-fetch"));
-const app = (0, express_1.default)();
-/* SETUP MIDDLEWARE */
+const router_1 = __importDefault(require("./auth/router"));
+const router_2 = __importDefault(require("./movie/router"));
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
+const app = express();
+app.enable("trust proxy");
+//node-fetch not work due to package.json
+// app.get("*", (req, res) => {
+//   // res.status(404).json({ msg: "No route is matching your request.." });
+//   fetch(
+//     "https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1"
+//   )
+//     .then((resp) => resp.json())
+//     .then((movies) => {
+//       console.log(movies);
+//       res.json(movies);
+//     });
+// });
+//middlewares
+app.use(logger("dev"));
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+}));
 app.disable("x-powered-by");
-app.use((0, cors_1.default)());
-app.use(express_1.default.json());
-app.use((0, cookie_parser_1.default)());
 // app.use(express.urlencoded({ extended: true }));
-app.use((0, cors_1.default)({ credentials: true, origin: "http://localhost:3000" }));
-app.use((0, morgan_1.default)("dev"));
 /* SETUP ROUTES */
+app.use(router_1.default);
+app.use("/", router_2.default);
+/* SETUP MIDDLEWARE */
 // app.use(middleware);
-// const fetch = require("node-fetch");
-let rawMoviesData = [];
-app.get("*", (req, res) => {
-    (0, node_fetch_1.default)("https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1")
-        .then((resp) => resp.json())
-        .then((movies) => {
-        // rawMoviesData = movies;
-        console.log("rawMoviesData", movies);
-        res.json({ ok: true });
+app.post("/temp", (req, res) => {
+    const movies = req.body.movies;
+    movies.forEach(function (movie) {
+        return __awaiter(this, void 0, void 0, function* () { });
     });
+});
+app.get("*", (req, res) => {
+    res.json("i am here");
 });
 /* START SERVER */
 // console.log(stripSecretKey, stripePublicKey);
