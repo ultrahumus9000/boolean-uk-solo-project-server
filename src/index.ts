@@ -1,11 +1,11 @@
 require("dotenv").config();
 
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const middleware = require("./utils/middleware");
-const cookieParser = require("cookie-parser");
-const { stripSecretKey, stripePublicKey } = require("./utils/authgenerator");
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import middleware from "./utils/middleware";
+import cookieParser from "cookie-parser";
+import { stripSecretKey, stripePublicKey } from "./utils/authgenerator";
 const app = express();
 
 /* SETUP MIDDLEWARE */

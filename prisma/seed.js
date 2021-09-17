@@ -1,29 +1,28 @@
-const faker = require("faker");
+import { PrismaClient } from "@prisma/client";
+import * as faker from "faker";
+import { hash } from "bcrypt";
 
-const { PrismaClient } = require("@prisma/client");
+import fetch from "node-fetch";
 
 const db = new PrismaClient();
-
 const { movie, cinema, user, policy } = db;
 
 const renderArray = Array(6).fill("");
 
-// const fetch = require("node-fetch");
-
-// const rawMoviesData = [];
+const rawMoviesData = [];
 
 // const defaultPassword = "test";
 
-// async function fetchMovies() {
-//   await fetch(
-//     "https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1"
-//   )
-//     .then((resp) => resp.json)
-//     .then((movies) => {
-//       rawMoviesData = movies;
-//       console.log("rawMoviesData", rawMoviesData);
-//     });
-// }
+async function fetchMovies() {
+  await fetch(
+    "https://api.themoviedb.org/3/movie/popular?api_key=d214ecb9bda367118385bcbdb9cd776f&language=en-US&page=1"
+  )
+    .then((resp) => resp.json)
+    .then((movies) => {
+      rawMoviesData = movies;
+      console.log("rawMoviesData", rawMoviesData);
+    });
+}
 
 // id           Int           @id @default(autoincrement())
 // staff        User[]
@@ -52,9 +51,11 @@ const renderArray = Array(6).fill("");
 // cinemaId     Int?
 // transactions Transaction[]
 
+// https://image.tmdb.org/t/p/w300/gzppdxEJ6fofhtLzSVSUJZEVxvq.jpg
+
 async function seed() {
-  // await fetchMovies();
-  // console.log("rawMoviesData", rawMoviesData);
+  await fetchMovies();
+  console.log("rawMoviesData", rawMoviesData);
 
   const cinemaResult = await cinema.create({
     data: {
@@ -83,6 +84,7 @@ async function seed() {
 
   const userResult = await user.createMany({
     data,
+    skipDuplicates: true,
   });
 
   console.log(cinemaResult, policyResult, data);
