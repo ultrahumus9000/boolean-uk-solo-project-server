@@ -39,6 +39,7 @@ async function login(req: Request, res: Response) {
 }
 
 async function logout(req: Request, res: Response) {
+  console.log("token", req.cookies.token);
   res.clearCookie("token");
   res.json("You've been succesfully logged out");
 }
