@@ -1,9 +1,9 @@
 const { Router } = require("express");
 
-import { originalFetchAllMoveis } from "./controller";
+import { fetchAllMoveis } from "./controller";
 
 const movieRouter = Router();
 
-movieRouter.get("/", originalFetchAllMoveis);
+movieRouter.get("/", fetchAllMoveis);
 
 export default movieRouter;

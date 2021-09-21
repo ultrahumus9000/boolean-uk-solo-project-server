@@ -12,33 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.createNewUser = void 0;
 const database_1 = __importDefault(require("../utils/database"));
-const service_1 = __importDefault(require("./service"));
+const bcrypt_1 = require("bcrypt");
 const { user } = database_1.default;
-function createNewUser(req, res) {
+function createNewUserWithHash(newUser) {
     return __awaiter(this, void 0, void 0, function* () {
-        const newUser = req.body;
-        try {
-            const modifiedUser = yield (0, service_1.default)(newUser);
-            res.json(modifiedUser);
-        }
-        catch (error) {
-            console.log(error);
-            res.json(error);
-        }
+        const plainPassword = newUser.password;
+        const hashedPasseword = yield (0, bcrypt_1.hash)(plainPassword, 10);
+        const savedUser = yield user.create({
+            data: Object.assign(Object.assign({}, newUser), { password: hashedPasseword }),
+        });
+        return savedUser;
     });
 }
-exports.createNewUser = createNewUser;
-function updateUser(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { id } = req.currentUser;
-        try {
-            res.json("");
-        }
-        catch (error) {
-            res.status(401).json(error);
-        }
-    });
-}
-exports.updateUser = updateUser;
+exports.default = createNewUserWithHash;
