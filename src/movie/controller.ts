@@ -4,7 +4,12 @@ const { movie } = db;
 
 async function fetchAllMoveis(req: Request, res: Response) {
   try {
-    const movies = await movie.findMany();
+    const movies = await movie.findMany({
+      select: {
+        title: true,
+        overview: true,
+      },
+    });
     res.json(movies);
   } catch (error) {
     console.log(error);

@@ -18,7 +18,12 @@ const { movie } = database_1.default;
 function fetchAllMoveis(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const movies = yield movie.findMany();
+            const movies = yield movie.findMany({
+                select: {
+                    title: true,
+                    overview: true,
+                },
+            });
             res.json(movies);
         }
         catch (error) {
