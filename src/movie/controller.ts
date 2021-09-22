@@ -6,6 +6,7 @@ async function fetchAllMoveis(req: Request, res: Response) {
   try {
     const movies = await movie.findMany({
       select: {
+        id: true,
         title: true,
         overview: true,
       },

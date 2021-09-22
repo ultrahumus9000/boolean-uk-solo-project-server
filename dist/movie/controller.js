@@ -20,6 +20,7 @@ function fetchAllMoveis(req, res) {
         try {
             const movies = yield movie.findMany({
                 select: {
+                    id: true,
                     title: true,
                     overview: true,
                 },
