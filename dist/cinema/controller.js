@@ -12,18 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createNewEvent = void 0;
+exports.getCinemaInfo = void 0;
 const database_1 = __importDefault(require("../utils/database"));
-const { event } = database_1.default;
-function createNewEvent(req, res) {
+const { cinema } = database_1.default;
+function getCinemaInfo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const content = req.body;
         try {
+            const cinemaInfo = yield cinema.findUnique({
+                where: {
+                    id: 1,
+                },
+            });
+            res.json(cinemaInfo);
         }
         catch (error) {
-            console.log(error);
             res.json(error);
         }
     });
 }
-exports.createNewEvent = createNewEvent;
+exports.getCinemaInfo = getCinemaInfo;
