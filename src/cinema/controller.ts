@@ -8,6 +8,14 @@ async function getCinemaInfo(req: Request, res: Response) {
       where: {
         id: 1,
       },
+      include: {
+        staff: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
     });
     res.json(cinemaInfo);
   } catch (error) {

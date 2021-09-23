@@ -22,6 +22,14 @@ function getCinemaInfo(req, res) {
                 where: {
                     id: 1,
                 },
+                include: {
+                    staff: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                        },
+                    },
+                },
             });
             res.json(cinemaInfo);
         }
