@@ -7,6 +7,7 @@ import movieRouter from "./movie/router";
 import userRouter from "./user/router";
 import eventRouter from "./event/router";
 import cinemaRouter from "./cinema/router";
+import policyRouter from "./policy/router";
 // import fetch from "node-fetch";
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -43,6 +44,7 @@ app.use("/user", userRouter);
 app.use(middleware);
 app.use("/events", eventRouter);
 app.use("/cinema", cinemaRouter);
+app.use("/policy", policyRouter);
 
 app.get("*", (req: Request, res: Response) => {
   res.status(404).json({ msg: "No route is matching your request.." });

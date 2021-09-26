@@ -10,6 +10,7 @@ const router_2 = __importDefault(require("./movie/router"));
 const router_3 = __importDefault(require("./user/router"));
 const router_4 = __importDefault(require("./event/router"));
 const router_5 = __importDefault(require("./cinema/router"));
+const router_6 = __importDefault(require("./policy/router"));
 // import fetch from "node-fetch";
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -36,6 +37,7 @@ app.use("/user", router_3.default);
 app.use(middleware_1.default);
 app.use("/events", router_4.default);
 app.use("/cinema", router_5.default);
+app.use("/policy", router_6.default);
 app.get("*", (req, res) => {
     res.status(404).json({ msg: "No route is matching your request.." });
 });
