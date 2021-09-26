@@ -78,13 +78,14 @@ model Movie {
 model Agenda {
   id           Int           @id @default(autoincrement())
   movie        Movie         @relation(fields: [movieId], references: [id], onDelete: Cascade)
-  movieId      Int           @unique
+  movieId      Int
   screening    Int
   showTime     DateTime      @db.Time
   event        Event         @relation(fields: [eventId], references: [id])
   eventId      Int
   transactions Transaction[]
   quantity     Int           @default(60)
+
 }
 
 model Policy {
