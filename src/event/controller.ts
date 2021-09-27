@@ -1,89 +1,119 @@
 import { Request, Response } from "express";
+import { add } from "date-fns";
 import db from "../utils/database";
 const { event, agenda } = db;
 
+type BasicEvent = {
+  newDate: string;
+  cinemaId: number;
+  movies: number[];
+  showTime: string[];
+  quantity: number;
+};
+
+async function basicCreateEvent({
+  newDate,
+  cinemaId,
+  movies,
+  showTime,
+  quantity,
+}: BasicEvent) {
+  const newEvent = await event.create({
+    data: {
+      date: newDate,
+      cinemaId,
+    },
+  });
+  for (const movie of movies) {
+    for await (const timeSlot of showTime) {
+      const modifiedDate = new Date(
+        Number(newDate.slice(0, 4)),
+        Number(newDate.slice(5, 7)),
+        Number(newDate.slice(8, 10)),
+        Number(timeSlot.slice(0, 2)),
+        Number(timeSlot.slice(3, 5))
+      ).toISOString();
+      const newAgenda = await agenda.create({
+        data: {
+          movieId: movie,
+          screening: movies.indexOf(movie) + 1,
+          showTime: modifiedDate,
+          eventId: newEvent.id,
+          quantity,
+        },
+      });
+    }
+  }
+  return true;
+}
+
 async function createNewEvent(req: Request, res: Response) {
   // need create new event with new agenda if there isnt any here
-  // const { date, cinemaId, movies, showTime, screening, quantity, repeat } =
-  //   req.body;
+  const { date, cinemaId, movies, showTime, screening, quantity, repeat } =
+    req.body;
+
   try {
-    // {
-    //   date: '2021-09-26',
-    //   cinemaId: 1,
-    //   movies: [ 6, 8, 10, 12, 14 ],
-    //   quantity: 60,
-    //   showTime: [ '11:00', '14:00', '17:00', '20:00' ],
-    //   screening: 5
-    // }
-    //
-    //
-    // id       Int      @id @default(autoincrement())
-    // date     DateTime @unique @db.Date
-    // agendas  Agenda[]
-    // cinema   Cinema   @relation(fields: [cinemaId], references: [id])
-    // cinemaId Int
-    //
-    //
-    // id           Int           @id @default(autoincrement())
-    // movie        Movie         @relation(fields: [movieId], references: [id], onDelete: Cascade)
-    // movieId      Int           @unique
-    // screening    Int
-    // showTime     DateTime      @db.Time
-    // event        Event         @relation(fields: [eventId], references: [id])
-    // eventId      Int
-    // transactions Transaction[]
-    // quantity     Int           @default(60)
-    // if (repeat !== "none") {
-    //   if (repeat === "one") {
-    //     const repeatArray = Array(7).fill("");
-    //   } else if (repeat === "two") {
-    //   } else {
-    //   }
-    // } else {
-    //   const newEvent = await event.create({
-    //     data: {
-    //       date,
-    //       cinemaId,
-    //     },
-    //   });
-    //   for await (const movie of movies) {
-    //     for await (const timeSlot of showTime) {
-    //       const newDate = new Date(
-    //         date.slice(0, 4),
-    //         date.slice(5, 7),
-    //         date.slice(8, 10),
-    //         timeSlot.slice(0, 2),
-    //         timeSlot.slice(3, 5)
-    //       ).toISOString();
-    //       const newAgenda = await agenda.create({
-    //         data: {
-    //           movieId: movie,
-    //           screening: movies.indexOf(movie) + 1,
-    //           showTime: newDate,
-    //           eventId: newEvent.id,
-    //           quantity,
-    //         },
-    //       });
-    //     }
-    //   }
-    // }
-    // res.json("succeed");
+    if (repeat !== "none") {
+      if (repeat === "one") {
+        const repeatArray = Array(7).fill("");
+        //library method
+        // const result = add(
+        //   new Date(
+        //     Number(modifiedDate.slice(0, 4)),
+        //     Number(modifiedDate.slice(5, 7)),
+        //     Number(modifiedDate.slice(8, 10))
+        //   ),
+        //   {
+        //     months: -1,
+        //     days: 3,
+        //   }
+        // );
+        const orginaldate = new Date(date);
+
+        for (let i = 0; i < repeatArray.length; i++) {
+          let newDate = "";
+          let modifiedDate = 0;
+          if (i === 0) {
+            modifiedDate = orginaldate.setDate(orginaldate.getDate() + 0);
+          } else {
+            modifiedDate = orginaldate.setDate(orginaldate.getDate() + 1);
+          }
+          newDate = new Date(modifiedDate).toISOString();
+
+          const result = await basicCreateEvent({
+            newDate,
+            cinemaId,
+            movies,
+            showTime,
+            quantity,
+          });
+        }
+      } else if (repeat === "two") {
+      } else {
+      }
+    } else {
+      const newDate = new Date(date).toISOString();
+
+      await basicCreateEvent({
+        newDate,
+        cinemaId,
+        movies,
+        showTime,
+        quantity,
+      });
+    }
+    res.json("succeed");
   } catch (error) {
     console.log(error);
     res.json("fail");
   }
 }
-//   id       Int      @id @default(autoincrement())
-//   date     DateTime @unique @db.Date
-//   agendas  Agenda[]
-//   cinema   Cinema   @relation(fields: [cinemaId], references: [id])
-//   cinemaId Int
 
 async function getLastestEvent(req: Request, res: Response) {
   try {
     const lastestEvent = await event.findFirst({
       orderBy: {
-        // date: "desc",
+        date: "desc",
       },
     });
 

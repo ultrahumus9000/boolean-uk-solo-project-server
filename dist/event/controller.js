@@ -8,6 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,73 +22,99 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLastestEvent = exports.createNewEvent = void 0;
 const database_1 = __importDefault(require("../utils/database"));
 const { event, agenda } = database_1.default;
+function basicCreateEvent({ newDate, cinemaId, movies, showTime, quantity, }) {
+    var showTime_1, showTime_1_1;
+    var e_1, _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        const newEvent = yield event.create({
+            data: {
+                date: newDate,
+                cinemaId,
+            },
+        });
+        for (const movie of movies) {
+            try {
+                for (showTime_1 = (e_1 = void 0, __asyncValues(showTime)); showTime_1_1 = yield showTime_1.next(), !showTime_1_1.done;) {
+                    const timeSlot = showTime_1_1.value;
+                    const modifiedDate = new Date(Number(newDate.slice(0, 4)), Number(newDate.slice(5, 7)), Number(newDate.slice(8, 10)), Number(timeSlot.slice(0, 2)), Number(timeSlot.slice(3, 5))).toISOString();
+                    const newAgenda = yield agenda.create({
+                        data: {
+                            movieId: movie,
+                            screening: movies.indexOf(movie) + 1,
+                            showTime: modifiedDate,
+                            eventId: newEvent.id,
+                            quantity,
+                        },
+                    });
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (showTime_1_1 && !showTime_1_1.done && (_a = showTime_1.return)) yield _a.call(showTime_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+        }
+        return true;
+    });
+}
 function createNewEvent(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         // need create new event with new agenda if there isnt any here
-        // const { date, cinemaId, movies, showTime, screening, quantity, repeat } =
-        //   req.body;
+        const { date, cinemaId, movies, showTime, screening, quantity, repeat } = req.body;
         try {
-            // {
-            //   date: '2021-09-26',
-            //   cinemaId: 1,
-            //   movies: [ 6, 8, 10, 12, 14 ],
-            //   quantity: 60,
-            //   showTime: [ '11:00', '14:00', '17:00', '20:00' ],
-            //   screening: 5
-            // }
-            //
-            //
-            // id       Int      @id @default(autoincrement())
-            // date     DateTime @unique @db.Date
-            // agendas  Agenda[]
-            // cinema   Cinema   @relation(fields: [cinemaId], references: [id])
-            // cinemaId Int
-            //
-            //
-            // id           Int           @id @default(autoincrement())
-            // movie        Movie         @relation(fields: [movieId], references: [id], onDelete: Cascade)
-            // movieId      Int           @unique
-            // screening    Int
-            // showTime     DateTime      @db.Time
-            // event        Event         @relation(fields: [eventId], references: [id])
-            // eventId      Int
-            // transactions Transaction[]
-            // quantity     Int           @default(60)
-            // if (repeat !== "none") {
-            //   if (repeat === "one") {
-            //     const repeatArray = Array(7).fill("");
-            //   } else if (repeat === "two") {
-            //   } else {
-            //   }
-            // } else {
-            //   const newEvent = await event.create({
-            //     data: {
-            //       date,
-            //       cinemaId,
-            //     },
-            //   });
-            //   for await (const movie of movies) {
-            //     for await (const timeSlot of showTime) {
-            //       const newDate = new Date(
-            //         date.slice(0, 4),
-            //         date.slice(5, 7),
-            //         date.slice(8, 10),
-            //         timeSlot.slice(0, 2),
-            //         timeSlot.slice(3, 5)
-            //       ).toISOString();
-            //       const newAgenda = await agenda.create({
-            //         data: {
-            //           movieId: movie,
-            //           screening: movies.indexOf(movie) + 1,
-            //           showTime: newDate,
-            //           eventId: newEvent.id,
-            //           quantity,
-            //         },
-            //       });
-            //     }
-            //   }
-            // }
-            // res.json("succeed");
+            if (repeat !== "none") {
+                if (repeat === "one") {
+                    const repeatArray = Array(7).fill("");
+                    //library method
+                    // const result = add(
+                    //   new Date(
+                    //     Number(modifiedDate.slice(0, 4)),
+                    //     Number(modifiedDate.slice(5, 7)),
+                    //     Number(modifiedDate.slice(8, 10))
+                    //   ),
+                    //   {
+                    //     months: -1,
+                    //     days: 3,
+                    //   }
+                    // );
+                    const orginaldate = new Date(date);
+                    for (let i = 0; i < repeatArray.length; i++) {
+                        let newDate = "";
+                        let modifiedDate = 0;
+                        if (i === 0) {
+                            modifiedDate = orginaldate.setDate(orginaldate.getDate() + 0);
+                        }
+                        else {
+                            modifiedDate = orginaldate.setDate(orginaldate.getDate() + 1);
+                        }
+                        newDate = new Date(modifiedDate).toISOString();
+                        const result = yield basicCreateEvent({
+                            newDate,
+                            cinemaId,
+                            movies,
+                            showTime,
+                            quantity,
+                        });
+                    }
+                }
+                else if (repeat === "two") {
+                }
+                else {
+                }
+            }
+            else {
+                const newDate = new Date(date).toISOString();
+                yield basicCreateEvent({
+                    newDate,
+                    cinemaId,
+                    movies,
+                    showTime,
+                    quantity,
+                });
+            }
+            res.json("succeed");
         }
         catch (error) {
             console.log(error);
@@ -90,17 +123,12 @@ function createNewEvent(req, res) {
     });
 }
 exports.createNewEvent = createNewEvent;
-//   id       Int      @id @default(autoincrement())
-//   date     DateTime @unique @db.Date
-//   agendas  Agenda[]
-//   cinema   Cinema   @relation(fields: [cinemaId], references: [id])
-//   cinemaId Int
 function getLastestEvent(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const lastestEvent = yield event.findFirst({
                 orderBy: {
-                // date: "desc",
+                    date: "desc",
                 },
             });
             res.json(lastestEvent);
