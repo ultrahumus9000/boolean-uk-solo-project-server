@@ -4,6 +4,6 @@ const publicRouter = Router();
 
 import { getPublicEvent } from "./controller";
 
-publicRouter.post("/", getPublicEvent);
+publicRouter.get("/", getPublicEvent);
 
 export default publicRouter;
