@@ -50,7 +50,6 @@ function login(req, res) {
 exports.login = login;
 function logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("token", req.cookies.token);
         res.clearCookie("token");
         res.json("You've been succesfully logged out");
     });
@@ -75,7 +74,6 @@ function validateLoggedInToken(req, res) {
                 },
             });
             const tokenUserData = Object.assign({}, userData);
-            console.log(tokenUserData);
             res.json(tokenUserData);
         }
         else {

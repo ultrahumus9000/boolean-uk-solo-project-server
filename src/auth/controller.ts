@@ -39,7 +39,6 @@ async function login(req: Request, res: Response) {
 }
 
 async function logout(req: Request, res: Response) {
-  console.log("token", req.cookies.token);
   res.clearCookie("token");
   res.json("You've been succesfully logged out");
 }
@@ -64,7 +63,7 @@ async function validateLoggedInToken(req: Request, res: Response) {
       },
     });
     const tokenUserData = { ...userData };
-    console.log(tokenUserData);
+
     res.json(tokenUserData);
   } else {
     res.status(401).json({ err: "No valid token was found" });

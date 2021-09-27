@@ -19,11 +19,35 @@ async function createNewUser(req: Request, res: Response) {
 
 async function updateUser(req: Request, res: Response) {
   const { id } = req.currentUser as User;
+  const updateInfo = req.body;
   try {
-    res.json("");
+    console.log("req.currentUser", req.currentUser);
+
+    const orginalUserInfo = await user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    const updatedUserInfo = { ...orginalUserInfo, ...updateInfo };
+
+    console.log("updatedUserInfo", updatedUserInfo);
+
+    const updatedResult = await user.update({
+      where: {
+        id,
+      },
+      data: updatedUserInfo,
+    });
+
+    const { username, firstName, lastName, email, avatar, role } =
+      updatedResult;
+
+    res.json({ username, firstName, lastName, email, avatar, role });
   } catch (error) {
     res.status(401).json(error);
   }
 }
+async function updateUserPassword(req: Request, res: Response) {}
 
-export { createNewUser, updateUser };
+export { createNewUser, updateUser, updateUserPassword };

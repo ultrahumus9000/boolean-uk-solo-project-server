@@ -9,4 +9,5 @@ const middleware_1 = __importDefault(require("../utils/middleware"));
 const userRouter = (0, express_1.Router)();
 userRouter.post("/", controller_1.createNewUser);
 userRouter.patch("/", middleware_1.default, controller_1.updateUser);
+userRouter.patch("/password", middleware_1.default, controller_1.updateUserPassword);
 exports.default = userRouter;
