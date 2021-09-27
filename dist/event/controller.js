@@ -59,6 +59,30 @@ function basicCreateEvent({ newDate, cinemaId, movies, showTime, quantity, }) {
         return true;
     });
 }
+function basicLoopCreateEvent({ date, repeatDigit, cinemaId, movies, showTime, quantity, }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const repeatArray = Array(repeatDigit).fill("");
+        const orginaldate = new Date(date);
+        for (let i = 0; i < repeatArray.length; i++) {
+            let newDate = "";
+            let modifiedDate = 0;
+            if (i === 0) {
+                modifiedDate = orginaldate.setDate(orginaldate.getDate() + 0);
+            }
+            else {
+                modifiedDate = orginaldate.setDate(orginaldate.getDate() + 1);
+            }
+            newDate = new Date(modifiedDate).toISOString();
+            const result = yield basicCreateEvent({
+                newDate,
+                cinemaId,
+                movies,
+                showTime,
+                quantity,
+            });
+        }
+    });
+}
 function createNewEvent(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         // need create new event with new agenda if there isnt any here
@@ -66,7 +90,6 @@ function createNewEvent(req, res) {
         try {
             if (repeat !== "none") {
                 if (repeat === "one") {
-                    const repeatArray = Array(7).fill("");
                     //library method
                     // const result = add(
                     //   new Date(
@@ -79,29 +102,37 @@ function createNewEvent(req, res) {
                     //     days: 3,
                     //   }
                     // );
-                    const orginaldate = new Date(date);
-                    for (let i = 0; i < repeatArray.length; i++) {
-                        let newDate = "";
-                        let modifiedDate = 0;
-                        if (i === 0) {
-                            modifiedDate = orginaldate.setDate(orginaldate.getDate() + 0);
-                        }
-                        else {
-                            modifiedDate = orginaldate.setDate(orginaldate.getDate() + 1);
-                        }
-                        newDate = new Date(modifiedDate).toISOString();
-                        const result = yield basicCreateEvent({
-                            newDate,
-                            cinemaId,
-                            movies,
-                            showTime,
-                            quantity,
-                        });
-                    }
+                    const repeatDigit = 7;
+                    yield basicLoopCreateEvent({
+                        date,
+                        repeatDigit,
+                        cinemaId,
+                        movies,
+                        showTime,
+                        quantity,
+                    });
                 }
                 else if (repeat === "two") {
+                    const repeatDigit = 14;
+                    yield basicLoopCreateEvent({
+                        date,
+                        repeatDigit,
+                        cinemaId,
+                        movies,
+                        showTime,
+                        quantity,
+                    });
                 }
                 else {
+                    const repeatDigit = 30;
+                    yield basicLoopCreateEvent({
+                        date,
+                        repeatDigit,
+                        cinemaId,
+                        movies,
+                        showTime,
+                        quantity,
+                    });
                 }
             }
             else {
