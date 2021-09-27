@@ -57,11 +57,14 @@ model Transaction {
 }
 
 model Event {
-  id       Int      @id @default(autoincrement())
-  date     DateTime @unique @db.Date
-  agendas  Agenda[]
-  cinema   Cinema   @relation(fields: [cinemaId], references: [id])
-  cinemaId Int
+  id        Int      @id @default(autoincrement())
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  agendas   Agenda[]
+  cinema    Cinema   @relation(fields: [cinemaId], references: [id])
+  cinemaId  Int
+
+  @@unique([startDate, endDate])
 }
 
 model Movie {
