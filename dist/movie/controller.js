@@ -12,19 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOutDatedFilms = exports.fetchAllMoveis = void 0;
+exports.deleteOneFilm = exports.addOneFilm = exports.fetchAllMoveis = void 0;
 const database_1 = __importDefault(require("../utils/database"));
 const { movie } = database_1.default;
 function fetchAllMoveis(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const movies = yield movie.findMany({
+                orderBy: {
+                    releaseDate: "asc",
+                },
                 select: {
                     id: true,
                     title: true,
                     overview: true,
+                    releaseDate: true,
+                    genre: true,
+                    poster: true,
                 },
             });
+            console.log("movies", movies);
             res.json(movies);
         }
         catch (error) {
@@ -34,10 +41,37 @@ function fetchAllMoveis(req, res) {
     });
 }
 exports.fetchAllMoveis = fetchAllMoveis;
-function listOutDatedFilm(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
+function addOneFilm(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const filmData = req.body;
+        try {
+            const result = yield movie.create({
+                data: filmData,
+            });
+            res.json(result);
+        }
+        catch (error) {
+            console.log(error);
+            res.json("fail to add");
+        }
+    });
 }
-function deleteOutDatedFilms(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
+exports.addOneFilm = addOneFilm;
+function deleteOneFilm(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const movieId = Number(req.params.id);
+        try {
+            yield movie.delete({
+                where: {
+                    id: movieId,
+                },
+            });
+            res.json("succeed deleted");
+        }
+        catch (error) {
+            console.log(error);
+            res.json("fail to delete");
+        }
+    });
 }
-exports.deleteOutDatedFilms = deleteOutDatedFilms;
+exports.deleteOneFilm = deleteOneFilm;
