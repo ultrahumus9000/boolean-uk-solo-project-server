@@ -85,6 +85,7 @@ async function basicLoopCreateEvent({
       quantity,
     });
   }
+  return true;
 }
 async function createNewEvent(req: Request, res: Response) {
   // need create new event with new agenda if there isnt any here
@@ -107,47 +108,66 @@ async function createNewEvent(req: Request, res: Response) {
         //   }
         // );
         const repeatDigit = 7;
-        await basicLoopCreateEvent({
-          date,
-          repeatDigit,
-          cinemaId,
-          movies,
-          showTime,
-          quantity,
-        });
+        try {
+          const result = await basicLoopCreateEvent({
+            date,
+            repeatDigit,
+            cinemaId,
+            movies,
+            showTime,
+            quantity,
+          });
+          res.json("succeed");
+        } catch (error) {
+          throw new Error("fail");
+        }
       } else if (repeat === "two") {
         const repeatDigit = 14;
-        await basicLoopCreateEvent({
-          date,
-          repeatDigit,
-          cinemaId,
-          movies,
-          showTime,
-          quantity,
-        });
+
+        try {
+          const result = await basicLoopCreateEvent({
+            date,
+            repeatDigit,
+            cinemaId,
+            movies,
+            showTime,
+            quantity,
+          });
+          res.json("succeed");
+        } catch (error) {
+          throw new Error("fail");
+        }
       } else {
         const repeatDigit = 30;
-        await basicLoopCreateEvent({
-          date,
-          repeatDigit,
-          cinemaId,
-          movies,
-          showTime,
-          quantity,
-        });
+        try {
+          const result = await basicLoopCreateEvent({
+            date,
+            repeatDigit,
+            cinemaId,
+            movies,
+            showTime,
+            quantity,
+          });
+          res.json("succeed");
+        } catch (error) {
+          throw new Error("fail");
+        }
       }
     } else {
       const newDate = new Date(date).toISOString();
-
-      await basicCreateEvent({
-        newDate,
-        cinemaId,
-        movies,
-        showTime,
-        quantity,
-      });
+      try {
+        const result = await basicCreateEvent({
+          newDate,
+          cinemaId,
+          movies,
+          showTime,
+          quantity,
+        });
+        res.json("succeed");
+      } catch (error) {
+        throw new Error("fail");
+      }
     }
-    res.json("succeed");
   } catch (error) {
     console.log(error);
     res.json("fail");
@@ -163,7 +183,10 @@ async function getLastestEvent(req: Request, res: Response) {
     });
 
     res.json(lastestEvent);
-  } catch (error) {}
+  } catch (error) {
+    console.log("");
+    res.json("");
+  }
 }
 
 export { createNewEvent, getLastestEvent };

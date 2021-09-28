@@ -18,4 +18,8 @@ async function fetchAllMoveis(req: Request, res: Response) {
   }
 }
 
-export { fetchAllMoveis };
+async function listOutDatedFilm(req: Request, res: Response) {}
+
+async function deleteOutDatedFilms(req: Request, res: Response) {}
+
+export { fetchAllMoveis, deleteOutDatedFilms };

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchAllMoveis = void 0;
+exports.deleteOutDatedFilms = exports.fetchAllMoveis = void 0;
 const database_1 = __importDefault(require("../utils/database"));
 const { movie } = database_1.default;
 function fetchAllMoveis(req, res) {
@@ -34,3 +34,10 @@ function fetchAllMoveis(req, res) {
     });
 }
 exports.fetchAllMoveis = fetchAllMoveis;
+function listOutDatedFilm(req, res) {
+    return __awaiter(this, void 0, void 0, function* () { });
+}
+function deleteOutDatedFilms(req, res) {
+    return __awaiter(this, void 0, void 0, function* () { });
+}
+exports.deleteOutDatedFilms = deleteOutDatedFilms;

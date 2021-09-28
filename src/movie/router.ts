@@ -1,6 +1,6 @@
 const { Router } = require("express");
 
-import { fetchAllMoveis } from "./controller";
+import { fetchAllMoveis, deleteOutDatedFilms } from "./controller";
 
 const movieRouter = Router();
 

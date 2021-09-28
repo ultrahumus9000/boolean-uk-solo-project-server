@@ -81,6 +81,7 @@ function basicLoopCreateEvent({ date, repeatDigit, cinemaId, movies, showTime, q
                 quantity,
             });
         }
+        return true;
     });
 }
 function createNewEvent(req, res) {
@@ -103,49 +104,72 @@ function createNewEvent(req, res) {
                     //   }
                     // );
                     const repeatDigit = 7;
-                    yield basicLoopCreateEvent({
-                        date,
-                        repeatDigit,
-                        cinemaId,
-                        movies,
-                        showTime,
-                        quantity,
-                    });
+                    try {
+                        const result = yield basicLoopCreateEvent({
+                            date,
+                            repeatDigit,
+                            cinemaId,
+                            movies,
+                            showTime,
+                            quantity,
+                        });
+                        res.json("succeed");
+                    }
+                    catch (error) {
+                        throw new Error("fail");
+                    }
                 }
                 else if (repeat === "two") {
                     const repeatDigit = 14;
-                    yield basicLoopCreateEvent({
-                        date,
-                        repeatDigit,
-                        cinemaId,
-                        movies,
-                        showTime,
-                        quantity,
-                    });
+                    try {
+                        const result = yield basicLoopCreateEvent({
+                            date,
+                            repeatDigit,
+                            cinemaId,
+                            movies,
+                            showTime,
+                            quantity,
+                        });
+                        res.json("succeed");
+                    }
+                    catch (error) {
+                        throw new Error("fail");
+                    }
                 }
                 else {
                     const repeatDigit = 30;
-                    yield basicLoopCreateEvent({
-                        date,
-                        repeatDigit,
-                        cinemaId,
-                        movies,
-                        showTime,
-                        quantity,
-                    });
+                    try {
+                        const result = yield basicLoopCreateEvent({
+                            date,
+                            repeatDigit,
+                            cinemaId,
+                            movies,
+                            showTime,
+                            quantity,
+                        });
+                        res.json("succeed");
+                    }
+                    catch (error) {
+                        throw new Error("fail");
+                    }
                 }
             }
             else {
                 const newDate = new Date(date).toISOString();
-                yield basicCreateEvent({
-                    newDate,
-                    cinemaId,
-                    movies,
-                    showTime,
-                    quantity,
-                });
+                try {
+                    const result = yield basicCreateEvent({
+                        newDate,
+                        cinemaId,
+                        movies,
+                        showTime,
+                        quantity,
+                    });
+                    res.json("succeed");
+                }
+                catch (error) {
+                    throw new Error("fail");
+                }
             }
-            res.json("succeed");
         }
         catch (error) {
             console.log(error);
@@ -164,7 +188,10 @@ function getLastestEvent(req, res) {
             });
             res.json(lastestEvent);
         }
-        catch (error) { }
+        catch (error) {
+            console.log("");
+            res.json("");
+        }
     });
 }
 exports.getLastestEvent = getLastestEvent;
