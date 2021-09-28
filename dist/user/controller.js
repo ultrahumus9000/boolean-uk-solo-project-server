@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserPassword = exports.updateUser = exports.createNewUser = void 0;
 const database_1 = __importDefault(require("../utils/database"));
+const bcrypt_1 = require("bcrypt");
+const bcrypt_2 = require("bcrypt");
 const service_1 = __importDefault(require("./service"));
 const { user } = database_1.default;
 function createNewUser(req, res) {
@@ -41,7 +43,6 @@ function updateUser(req, res) {
                 },
             });
             const updatedUserInfo = Object.assign(Object.assign({}, orginalUserInfo), updateInfo);
-            console.log("updatedUserInfo", updatedUserInfo);
             const updatedResult = yield user.update({
                 where: {
                     id,
@@ -58,6 +59,39 @@ function updateUser(req, res) {
 }
 exports.updateUser = updateUser;
 function updateUserPassword(req, res) {
-    return __awaiter(this, void 0, void 0, function* () { });
+    return __awaiter(this, void 0, void 0, function* () {
+        const { originPassword, newPassword } = req.body;
+        const { id } = req.currentUser;
+        try {
+            const foundUser = yield user.findUnique({
+                where: {
+                    id,
+                },
+            });
+            if (!foundUser) {
+                return null;
+            }
+            const passwordCompareResult = yield (0, bcrypt_1.compare)(originPassword, foundUser.password);
+            if (passwordCompareResult) {
+                const hashedPasseword = yield (0, bcrypt_2.hash)(newPassword, 10);
+                yield user.update({
+                    where: {
+                        id,
+                    },
+                    data: {
+                        password: hashedPasseword,
+                    },
+                });
+                res.json("your password changed successfully");
+            }
+            else {
+                throw new Error("Original Password Doesnt Match,fail");
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.status(401).json(error);
+        }
+    });
 }
 exports.updateUserPassword = updateUserPassword;

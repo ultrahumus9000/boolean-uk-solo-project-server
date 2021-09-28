@@ -1,7 +1,8 @@
 import { User } from ".prisma/client";
 import { Request, Response } from "express";
 import db from "../utils/database";
-
+import { compare } from "bcrypt";
+import { hash } from "bcrypt";
 import createNewUserWithHash from "./service";
 
 const { user } = db;
@@ -29,8 +30,6 @@ async function updateUser(req: Request, res: Response) {
 
     const updatedUserInfo = { ...orginalUserInfo, ...updateInfo };
 
-    console.log("updatedUserInfo", updatedUserInfo);
-
     const updatedResult = await user.update({
       where: {
         id,
@@ -46,6 +45,47 @@ async function updateUser(req: Request, res: Response) {
     res.status(401).json(error);
   }
 }
-async function updateUserPassword(req: Request, res: Response) {}
+async function updateUserPassword(req: Request, res: Response) {
+  const { originPassword, newPassword } = req.body;
+
+  const { id } = req.currentUser as User;
+
+  try {
+    const foundUser = await user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!foundUser) {
+      return null;
+    }
+
+    const passwordCompareResult = await compare(
+      originPassword,
+      foundUser.password
+    );
+
+    if (passwordCompareResult) {
+      const hashedPasseword = await hash(newPassword, 10);
+
+      await user.update({
+        where: {
+          id,
+        },
+        data: {
+          password: hashedPasseword,
+        },
+      });
+
+      res.json("your password changed successfully");
+    } else {
+      throw new Error("Original Password Doesnt Match,fail");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(401).json(error);
+  }
+}
 
 export { createNewUser, updateUser, updateUserPassword };
