@@ -35,7 +35,6 @@ function updateUser(req, res) {
         const { id } = req.currentUser;
         const updateInfo = req.body;
         try {
-            console.log("req.currentUser", req.currentUser);
             const orginalUserInfo = yield user.findUnique({
                 where: {
                     id,

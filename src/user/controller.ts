@@ -21,8 +21,6 @@ async function updateUser(req: Request, res: Response) {
   const { id } = req.currentUser as User;
   const updateInfo = req.body;
   try {
-    console.log("req.currentUser", req.currentUser);
-
     const orginalUserInfo = await user.findUnique({
       where: {
         id,
