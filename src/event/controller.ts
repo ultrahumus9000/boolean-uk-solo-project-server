@@ -95,7 +95,7 @@ async function createNewEvent(req: Request, res: Response) {
   try {
     if (repeat !== "none") {
       if (repeat === "one") {
-        //library method
+        // library method
         // const result = add(
         //   new Date(
         //     Number(modifiedDate.slice(0, 4)),
@@ -103,10 +103,11 @@ async function createNewEvent(req: Request, res: Response) {
         //     Number(modifiedDate.slice(8, 10))
         //   ),
         //   {
-        //     months: -1,
+        //     years:1,
+        //     months: 1,
         //     days: 3,
         //   }
-        // );
+
         const repeatDigit = 7;
         try {
           const result = await basicLoopCreateEvent({

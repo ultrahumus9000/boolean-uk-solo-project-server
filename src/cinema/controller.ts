@@ -10,6 +10,9 @@ async function getCinemaInfo(req: Request, res: Response) {
       },
       include: {
         staff: {
+          where: {
+            role: "Admin",
+          },
           select: {
             firstName: true,
             lastName: true,

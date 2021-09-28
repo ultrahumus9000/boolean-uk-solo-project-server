@@ -24,6 +24,9 @@ function getCinemaInfo(req, res) {
                 },
                 include: {
                     staff: {
+                        where: {
+                            role: "Admin",
+                        },
                         select: {
                             firstName: true,
                             lastName: true,
