@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { date } from "faker";
+
 import db from "../utils/database";
 const { event, agenda, movie } = db;
 
