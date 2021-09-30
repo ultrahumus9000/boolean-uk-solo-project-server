@@ -13,6 +13,7 @@ const router_5 = __importDefault(require("./cinema/router"));
 const router_6 = __importDefault(require("./policy/router"));
 const router_7 = __importDefault(require("./public/router"));
 const router_8 = __importDefault(require("./transaction/router"));
+const router_9 = __importDefault(require("./payment/router"));
 // import fetch from "node-fetch";
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -42,6 +43,7 @@ app.use("/cinema", router_5.default);
 app.use("/policy", router_6.default);
 app.use("/movies", router_2.default);
 app.use("/transactions", router_8.default);
+app.use("/payment", router_9.default);
 app.get("*", (req, res) => {
     res.status(404).json({ msg: "No route is matching your request.." });
 });

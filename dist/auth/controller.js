@@ -26,6 +26,7 @@ function login(req, res) {
             const token = (0, authgenerator_1.createToken)({
                 id: loginUser.id,
                 username: loginUser.username,
+                email: loginUser.email,
                 role: loggedRole,
             });
             res.cookie("token", token, {

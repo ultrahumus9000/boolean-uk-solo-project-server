@@ -10,6 +10,7 @@ import cinemaRouter from "./cinema/router";
 import policyRouter from "./policy/router";
 import publicRouter from "./public/router";
 import transactionRouter from "./transaction/router";
+import paymentRouter from "./payment/router";
 // import fetch from "node-fetch";
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -49,6 +50,7 @@ app.use("/cinema", cinemaRouter);
 app.use("/policy", policyRouter);
 app.use("/movies", movieRouter);
 app.use("/transactions", transactionRouter);
+app.use("/payment", paymentRouter);
 
 app.get("*", (req: Request, res: Response) => {
   res.status(404).json({ msg: "No route is matching your request.." });

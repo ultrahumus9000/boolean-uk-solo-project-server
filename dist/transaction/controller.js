@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getRevenue = exports.addTransaction = void 0;
 const database_1 = __importDefault(require("../utils/database"));
 const { transaction, agenda } = database_1.default;
 function addTransaction(req, res) {
@@ -50,7 +51,7 @@ function addTransaction(req, res) {
                     quantity: (orginalTicketQuantity === null || orginalTicketQuantity === void 0 ? void 0 : orginalTicketQuantity.quantity) - quantity,
                 },
             });
-            console.log({ newTransaction, orginalTicketQuantity, modifyAgenda });
+            // console.log({ newTransaction, orginalTicketQuantity, modifyAgenda });
             res.json({ newTransaction, orginalTicketQuantity, modifyAgenda });
         }
         catch (error) {
@@ -59,7 +60,25 @@ function addTransaction(req, res) {
         }
     });
 }
-exports.default = addTransaction;
+exports.addTransaction = addTransaction;
+function getRevenue(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const revenue = yield transaction.groupBy({
+                by: ["cinemaId"],
+                _sum: {
+                    total: true,
+                },
+            });
+            res.json(revenue);
+        }
+        catch (error) {
+            console.log(error);
+            res.json("fail");
+        }
+    });
+}
+exports.getRevenue = getRevenue;
 // id        Int      @id @default(autoincrement())
 // guest     User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
 // guestId   Int

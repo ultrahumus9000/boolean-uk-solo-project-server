@@ -16,6 +16,7 @@ async function login(req: Request, res: Response) {
     const token = createToken({
       id: loginUser.id,
       username: loginUser.username,
+      email: loginUser.email,
       role: loggedRole,
     });
 

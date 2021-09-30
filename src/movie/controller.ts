@@ -17,7 +17,7 @@ async function fetchAllMoveis(req: Request, res: Response) {
         poster: true,
       },
     });
-    console.log("movies", movies);
+
     res.json(movies);
   } catch (error) {
     console.log(error);

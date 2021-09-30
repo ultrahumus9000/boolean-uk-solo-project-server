@@ -31,7 +31,6 @@ function fetchAllMoveis(req, res) {
                     poster: true,
                 },
             });
-            console.log("movies", movies);
             res.json(movies);
         }
         catch (error) {

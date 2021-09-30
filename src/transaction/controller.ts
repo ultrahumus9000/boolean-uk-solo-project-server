@@ -42,7 +42,7 @@ async function addTransaction(req: Request, res: Response) {
       },
     });
 
-    console.log({ newTransaction, orginalTicketQuantity, modifyAgenda });
+    // console.log({ newTransaction, orginalTicketQuantity, modifyAgenda });
     res.json({ newTransaction, orginalTicketQuantity, modifyAgenda });
   } catch (error) {
     console.log(error);
@@ -50,7 +50,22 @@ async function addTransaction(req: Request, res: Response) {
   }
 }
 
-export default addTransaction;
+async function getRevenue(req: Request, res: Response) {
+  try {
+    const revenue = await transaction.groupBy({
+      by: ["cinemaId"],
+      _sum: {
+        total: true,
+      },
+    });
+    res.json(revenue);
+  } catch (error) {
+    console.log(error);
+    res.json("fail");
+  }
+}
+
+export { addTransaction, getRevenue };
 
 // id        Int      @id @default(autoincrement())
 // guest     User     @relation(fields: [guestId], references: [id], onDelete: Cascade)
