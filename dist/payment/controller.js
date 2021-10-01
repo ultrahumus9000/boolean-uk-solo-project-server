@@ -28,7 +28,6 @@ function addNewPayment(req, res) {
                 receipt_email: token.email,
                 description: "film tickets",
             });
-            console.log("stripe result", result);
             res.status(200).json(result);
         }
         catch (error) {
