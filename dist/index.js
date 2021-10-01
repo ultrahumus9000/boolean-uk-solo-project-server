@@ -43,7 +43,7 @@ app.use("/cinema", router_5.default);
 app.use("/policy", router_6.default);
 app.use("/movies", router_2.default);
 app.use("/transactions", router_8.default);
-app.use("/payment", router_9.default);
+app.use("/charges", router_9.default);
 app.get("*", (req, res) => {
     res.status(404).json({ msg: "No route is matching your request.." });
 });
