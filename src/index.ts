@@ -50,7 +50,7 @@ app.use("/cinema", cinemaRouter);
 app.use("/policy", policyRouter);
 app.use("/movies", movieRouter);
 app.use("/transactions", transactionRouter);
-app.use("/payment", paymentRouter);
+app.use("/charges", paymentRouter);
 
 app.get("*", (req: Request, res: Response) => {
   res.status(404).json({ msg: "No route is matching your request.." });
