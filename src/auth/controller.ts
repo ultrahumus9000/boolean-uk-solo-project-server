@@ -13,14 +13,14 @@ async function login(req: Request, res: Response) {
     const loginUser = await findUserWithValidation(userCredtial);
     const loggedRole = loginUser.role;
 
-    const token = createToken({
+    const tokenOne = createToken({
       id: loginUser.id,
       username: loginUser.username,
       email: loginUser.email,
       role: loggedRole,
     });
 
-    res.cookie("token", token, {
+    res.cookie("tokenOne", tokenOne, {
       httpOnly: true,
     });
 
@@ -40,7 +40,7 @@ async function login(req: Request, res: Response) {
 }
 
 async function logout(req: Request, res: Response) {
-  res.clearCookie("token");
+  res.clearCookie("tokenOne");
   res.json("You've been succesfully logged out");
 }
 

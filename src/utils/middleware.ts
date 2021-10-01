@@ -15,9 +15,9 @@ declare global {
 }
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  const { token } = req.cookies;
+  const { tokenOne } = req.cookies;
 
-  let userData = token && validateToken(token);
+  let userData = tokenOne && validateToken(tokenOne);
 
   if (userData) {
     req.currentUser = userData;

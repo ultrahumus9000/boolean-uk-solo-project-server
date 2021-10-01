@@ -23,13 +23,13 @@ function login(req, res) {
         try {
             const loginUser = yield (0, service_1.default)(userCredtial);
             const loggedRole = loginUser.role;
-            const token = (0, authgenerator_1.createToken)({
+            const tokenOne = (0, authgenerator_1.createToken)({
                 id: loginUser.id,
                 username: loginUser.username,
                 email: loginUser.email,
                 role: loggedRole,
             });
-            res.cookie("token", token, {
+            res.cookie("tokenOne", tokenOne, {
                 httpOnly: true,
             });
             const loggedUser = {
@@ -51,7 +51,7 @@ function login(req, res) {
 exports.login = login;
 function logout(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.clearCookie("token");
+        res.clearCookie("tokenOne");
         res.json("You've been succesfully logged out");
     });
 }
