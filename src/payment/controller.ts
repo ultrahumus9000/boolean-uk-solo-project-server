@@ -11,7 +11,7 @@ function addNewPayment(req: Request, res: Response) {
     const idempotentKey = new Date().getTime();
     stripe.customers
       .create({
-        email,
+        email: token.email,
         source: token.id,
       })
       .then((customer: any) =>
